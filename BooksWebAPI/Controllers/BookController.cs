@@ -2,6 +2,7 @@
 using BooksWebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace BooksWebAPI.Controllers
@@ -15,6 +16,18 @@ namespace BooksWebAPI.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
+
+        public async Task<ActionResult<IEnumerable<Book>>> GetBook()
+        {
+            if(_context.Books == null)
+                return NotFound();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+            return await _context.Books.Where(book => Convert.ToString(book.UserId) == userId).ToListAsync();
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<Book>> PostWord(Book book)
