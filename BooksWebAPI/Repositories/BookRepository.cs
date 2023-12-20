@@ -40,6 +40,11 @@ namespace BooksWebAPI.Repositories
             return false;
         }
 
+        public string GetCurentId(ClaimsPrincipal user)
+        {
+            return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

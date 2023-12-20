@@ -1,5 +1,6 @@
 ﻿using BooksWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BooksWebAPI.Inerfaces
 {
@@ -10,6 +11,8 @@ namespace BooksWebAPI.Inerfaces
         bool Add(Book book);
 
         bool Remove(Book book);
+
+        string GetCurentId(ClaimsPrincipal user);
 
         bool IsNull(string userId);
 

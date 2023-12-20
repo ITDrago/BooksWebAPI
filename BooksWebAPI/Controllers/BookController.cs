@@ -20,11 +20,11 @@ namespace BooksWebAPI.Controllers
         }
 
         [HttpGet]
-  
+
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            if(userId == null)
+            var userId = _bookRepository.GetCurentId(User);
+            if (userId == null)
                 return BadRequest("User not found");
 
             var books = await _bookRepository.GetAll(userId);
@@ -32,25 +32,29 @@ namespace BooksWebAPI.Controllers
                 return NotFound("No books found for the user");
 
             return Ok(books);
-           
-
         }
 
         [HttpPost]
         public async Task<ActionResult<Book>> PostWord(Book book)
         {
-            if (book == null)
-                return BadRequest("Invalid book data");
-
             try
-            { 
+            {
+                var userId = _bookRepository.GetCurentId(User);
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest("User not found");
+
+                book.UserId = Convert.ToInt32(userId);
+
+                if (book == null)
+                    return BadRequest("Invalid book data");
                 _bookRepository.Add(book);
                 return Ok();
             }
-            catch (Exception ex) { return StatusCode(StatusCodes.Status500InternalServerError, ex.Message); }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 
-            
         }
-
     }
 }
