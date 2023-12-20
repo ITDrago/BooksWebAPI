@@ -36,14 +36,20 @@ namespace BooksWebAPI.Controllers
 
         }
 
-
         [HttpPost]
         public async Task<ActionResult<Book>> PostWord(Book book)
         {
-            try { _bookRepository.Add(book); }
-            catch (Exception ex) { return BadRequest(); }
+            if (book == null)
+                return BadRequest("Invalid book data");
 
-            return Ok();
+            try
+            { 
+                _bookRepository.Add(book);
+                return Ok();
+            }
+            catch (Exception ex) { return StatusCode(StatusCodes.Status500InternalServerError, ex.Message); }
+
+            
         }
 
     }
