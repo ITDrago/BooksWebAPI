@@ -1,4 +1,5 @@
 ﻿using BooksWebAPI.Data;
+using BooksWebAPI.Inerfaces;
 using BooksWebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,34 +12,36 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public BookController(ApplicationDbContext context)
+        private readonly IBookRepository _bookRepository;
+
+        public BookController(IBookRepository bookRepository)
         {
-            _context = context;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet]
-
-        public async Task<ActionResult<IEnumerable<Book>>> GetBook()
+  
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            if(_context.Books == null)
-                return NotFound();
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            if(userId == null)
+                return BadRequest("User not found");
 
-            return await _context.Books.Where(book => Convert.ToString(book.UserId) == userId).ToListAsync();
+            var books = await _bookRepository.GetAll(userId);
+            if (books == null)
+                return NotFound("No books found for the user");
+
+            return Ok(books);
+           
+
         }
 
 
         [HttpPost]
         public async Task<ActionResult<Book>> PostWord(Book book)
         {
-            try
-            {
-
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-            }
-            catch (Exception ex) {return BadRequest();}
+            try { _bookRepository.Add(book); }
+            catch (Exception ex) { return BadRequest(); }
 
             return Ok();
         }
