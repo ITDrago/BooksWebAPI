@@ -42,7 +42,7 @@ namespace BooksWebAPI.Repositories
 
         public string GetCurentId(ClaimsPrincipal user)
         {
-            return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
         public bool Save()
