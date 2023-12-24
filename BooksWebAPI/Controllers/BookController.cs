@@ -37,7 +37,7 @@ namespace BooksWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Book>> PostWord(Book book)
+        public async Task<ActionResult<Book>> PostBook(Book book)
         {
             try
             {
@@ -57,6 +57,24 @@ namespace BooksWebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            if (!await _bookRepository.Remove(id))
+                return NotFound("No books found for this id");
+
+            return Ok();
+        }
+
+        [HttpPut]
+
+        public async Task<IActionResult> PutBook(int id, Book book)
+        {
+            if (!await _bookRepository.Update(id, book))
+                return BadRequest("Unable to update data");
+
+            return Ok();
         }
     }
 }

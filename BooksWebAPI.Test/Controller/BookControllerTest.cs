@@ -4,6 +4,7 @@ using BooksWebAPI.Models;
 using BooksWebAPI.Repositories;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -45,10 +46,45 @@ namespace BooksWebAPI.Test.Controller
             var controller = new BookController(_bookRepositroy);
 
             //Act
-            var result = await controller.PostWord(book);
+            var result = await controller.PostBook(book);
 
             //Assert
             result.Should().BeOfType<ActionResult<Book>>();
+
+        }
+
+        [Fact]
+        public async Task BookController_DeleteBook_ReturnOkAsync()
+        {
+            //Arange
+            int bookId = 8;
+            string userId = "1";
+            var controller = new BookController(_bookRepositroy);
+
+            //Act
+            var result = await controller.DeleteBook(bookId);
+
+            //Assrt
+            result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task BookController_PutBook_ReturnOkAsync()
+        {
+            //Arange
+            int bookId = 10;
+            var book = A.Fake<Book>();
+
+            var controller = new BookController(_bookRepositroy);
+
+            //Act
+            var result = await controller.PutBook(bookId,book);
+
+            //Assrt
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(OkObjectResult));
+
+
 
         }
 

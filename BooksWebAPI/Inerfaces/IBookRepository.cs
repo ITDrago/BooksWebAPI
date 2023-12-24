@@ -10,7 +10,9 @@ namespace BooksWebAPI.Inerfaces
 
         bool Add(Book book);
 
-        bool Remove(Book book);
+        Task<bool> Remove(int id);
+
+        Task<bool> Update(int id, Book book);
 
         string GetCurentId(ClaimsPrincipal user);
 
