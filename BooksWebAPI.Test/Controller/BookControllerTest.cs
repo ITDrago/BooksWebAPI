@@ -72,7 +72,7 @@ namespace BooksWebAPI.Test.Controller
         public async Task BookController_PutBook_ReturnOkAsync()
         {
             //Arange
-            int bookId = 10;
+            int bookId = 1;
             var book = A.Fake<Book>();
 
             var controller = new BookController(_bookRepositroy);
