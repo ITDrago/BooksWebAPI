@@ -8,16 +8,16 @@ namespace BooksWebAPI.Inerfaces
     {
         Task<ActionResult<IEnumerable<Book>>> GetAll(string userId);
 
-        bool Add(Book book);
+        Task<bool> Add(Book book);
 
         Task<bool> Remove(int id);
 
         Task<bool> Update(int id, Book book);
 
-        string GetCurentId(ClaimsPrincipal user);
+        string? GetCurentId(ClaimsPrincipal user);
 
         bool IsNull(string userId);
 
-        bool Save();
+        Task<bool> Save();
     }
 }

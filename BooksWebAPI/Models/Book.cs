@@ -9,7 +9,7 @@ namespace BooksWebAPI.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Book_DescriptionMaxSimbol]
         public string? Description { get; set; }

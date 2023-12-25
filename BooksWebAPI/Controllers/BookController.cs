@@ -41,7 +41,7 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var userId = _bookRepository.GetCurentId(User);
+                var userId =  _bookRepository.GetCurentId(User);
                 if (string.IsNullOrEmpty(userId))
                     return BadRequest("User not found");
 
@@ -49,7 +49,7 @@ namespace BooksWebAPI.Controllers
 
                 if (book == null)
                     return BadRequest("Invalid book data");
-                _bookRepository.Add(book);
+                await _bookRepository.Add(book);
                 return Ok();
             }
             catch (Exception ex)

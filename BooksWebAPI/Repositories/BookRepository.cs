@@ -17,7 +17,7 @@ namespace BooksWebAPI.Repositories
                 _context = context;
         }
 
-        public bool Add(Book book)
+        public Task<bool> Add(Book book)
         {
             _context.Books.Add(book);
             return Save();
@@ -34,7 +34,7 @@ namespace BooksWebAPI.Repositories
             if (book != null)
             {
                 _context.Books.Remove(book);
-                return Save();
+                return await  Save();
             }
             return false;
         }
@@ -63,14 +63,14 @@ namespace BooksWebAPI.Repositories
             return false;
         }
 
-        public string GetCurentId(ClaimsPrincipal user)
+        public string? GetCurentId(ClaimsPrincipal user)
         {
             return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
+            var saved = await _context.SaveChangesAsync();
             return saved > 0;
         }
     }

@@ -88,10 +88,11 @@ namespace BooksWebAPI.Test.Repository
             var bookRepositroy = new BookRepository(dbContext);
 
             //Act
-            var result = await bookRepositroy.Update(bookId, book);
+            var result = await bookRepositroy.Update(bookId, book!);
 
             //Assert
             result.Should().BeTrue();
+           
         }
 
     }
