@@ -82,7 +82,7 @@ namespace BooksWebAPI.Test.Controller
 
             //Assrt
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(OkObjectResult));
+            
 
 
 

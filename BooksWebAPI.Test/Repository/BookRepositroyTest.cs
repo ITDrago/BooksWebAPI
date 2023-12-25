@@ -10,6 +10,7 @@ using BooksWebAPI.Models;
 using BooksWebAPI.Repositories;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using FakeItEasy;
 
 namespace BooksWebAPI.Test.Repository
 {
@@ -43,7 +44,7 @@ namespace BooksWebAPI.Test.Repository
         }
 
         [Fact]
-        public async Task BookPokemonRepository_GetBooks_ReturnsBooks()
+        public async Task BookRepository_GetAll_ReturnsBooks()
         {
             //Arrange 
             var userId = "1";
@@ -58,5 +59,40 @@ namespace BooksWebAPI.Test.Repository
             result.Should().BeOfType<ActionResult<IEnumerable<Book>>>();
 
         }
+
+
+        [Fact]
+        public async Task BookRepository_Remove_ReturnsTrue()
+        {
+            //Arrange 
+            var bookId = 1;
+            var dbContext = await GetDatabaseContext();
+            var bookRepository = new BookRepository(dbContext);
+
+            //Act
+            var result = await bookRepository.Remove(bookId);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task BookRepository_Update_ReturnsTrue()
+        {
+            //Arrange
+         
+           
+            var bookId = 1;
+            var dbContext = await GetDatabaseContext();
+            var book =  await dbContext.Books.FirstOrDefaultAsync(book => book.Id == bookId);
+            var bookRepositroy = new BookRepository(dbContext);
+
+            //Act
+            var result = await bookRepositroy.Update(bookId, book);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
     }
 }
