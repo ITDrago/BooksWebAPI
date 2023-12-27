@@ -6,7 +6,7 @@ namespace BooksWebAPI.Inerfaces
 {
     public interface IBookRepository
     {
-        Task<ActionResult<IEnumerable<Book>>> GetAll(string userId);
+        Task<IEnumerable<BookDto>> GetAll(string userId);
 
         Task<bool> Add(Book book);
 

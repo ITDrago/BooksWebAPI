@@ -13,25 +13,26 @@ namespace BooksWebAPI.Test.Controller
     public class BookControllerTest
     {
         //Dependencies
-        private readonly IBookRepository _bookRepositroy;
+        private readonly IBookRepository _bookRepository;
 
         public BookControllerTest()
         {
-            _bookRepositroy = A.Fake<IBookRepository>();
+            _bookRepository = A.Fake<IBookRepository>();
         }
 
         [Fact]
-        public async Task BookController_GetBooks_ReturnOKAsync()
+        public  void BookController_GetBooks_ReturnOKAsync()
         {
             //Arrange
-            var controller = new BookController(_bookRepositroy);
+
+            var controller = new BookController(_bookRepository);
 
             //Act
-            var result = await controller.GetBooks();
+            var result =  controller.GetBooks();
 
             //Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType<ActionResult<IEnumerable<Book>>>();
+            result.Should().BeOfType<ActionResult<IEnumerable<BookDto>>>();
             
         }
 
@@ -40,7 +41,7 @@ namespace BooksWebAPI.Test.Controller
         {
             //Arange
             var book = A.Fake<Book>();
-            var controller = new BookController(_bookRepositroy);
+            var controller = new BookController(_bookRepository);
 
             //Act
             var result = await controller.PostBook(book);
@@ -55,7 +56,7 @@ namespace BooksWebAPI.Test.Controller
         {
             //Arange
             int bookId = 8;
-            var controller = new BookController(_bookRepositroy);
+            var controller = new BookController(_bookRepository);
 
             //Act
             var result = await controller.DeleteBook(bookId);
@@ -71,7 +72,7 @@ namespace BooksWebAPI.Test.Controller
             int bookId = 1;
             var book = A.Fake<Book>();
 
-            var controller = new BookController(_bookRepositroy);
+            var controller = new BookController(_bookRepository);
 
             //Act
             var result = await controller.PutBook(bookId,book);

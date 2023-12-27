@@ -1,5 +1,4 @@
 ﻿using BooksWebAPI.Models.Validations;
-using Microsoft.AspNetCore.SignalR;
 using System.ComponentModel.DataAnnotations;
 
 namespace BooksWebAPI.Models

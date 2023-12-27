@@ -11,11 +11,22 @@ using BooksWebAPI.Repositories;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using FakeItEasy;
+using AutoMapper;
+using BooksWebAPI.Inerfaces;
 
 namespace BooksWebAPI.Test.Repository
 {
     public class BookRepositroy
     {
+        private readonly IMapper _mapper;
+        private readonly IBookRepository _bookRepositroy;
+        public BookRepositroy()
+        {
+            _mapper = A.Fake<IMapper>();
+            _bookRepositroy = A.Fake<IBookRepository>();
+        }
+
+
         private async Task<ApplicationDbContext> GetDatabaseContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -43,20 +54,20 @@ namespace BooksWebAPI.Test.Repository
             return databaseContext;
         }
 
+        
         [Fact]
         public async Task BookRepository_GetAll_ReturnsBooks()
         {
             //Arrange 
             var userId = "1";
             var dbContext = await GetDatabaseContext();
-            var bookRepository = new BookRepository(dbContext);
+            var bookRepository = new BookRepository(dbContext, _mapper);
 
             //Act
             var result = await bookRepository.GetAll(userId);
 
             //Assert
             result.Should().NotBeNull();
-            result.Should().BeOfType<ActionResult<IEnumerable<Book>>>();
 
         }
 
@@ -67,7 +78,7 @@ namespace BooksWebAPI.Test.Repository
             //Arrange 
             var bookId = 1;
             var dbContext = await GetDatabaseContext();
-            var bookRepository = new BookRepository(dbContext);
+            var bookRepository = new BookRepository(dbContext, _mapper);
 
             //Act
             var result = await bookRepository.Remove(bookId);
@@ -85,7 +96,7 @@ namespace BooksWebAPI.Test.Repository
             var bookId = 1;
             var dbContext = await GetDatabaseContext();
             var book =  await dbContext.Books.FirstOrDefaultAsync(book => book.Id == bookId);
-            var bookRepositroy = new BookRepository(dbContext);
+            var bookRepositroy = new BookRepository(dbContext, _mapper);
 
             //Act
             var result = await bookRepositroy.Update(bookId, book!);

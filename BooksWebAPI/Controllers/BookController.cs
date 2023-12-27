@@ -23,13 +23,13 @@ namespace BooksWebAPI.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public ActionResult<IEnumerable<BookDto>> GetBooks()
         {
             var userId = _bookRepository.GetCurentId(User);
             if (userId == null)
                 return BadRequest("User not found");
 
-            var books = await _bookRepository.GetAll(userId);
+            var books = _bookRepository.GetAll(userId);
             if (books == null)
                 return NotFound("No books found for the user");
 

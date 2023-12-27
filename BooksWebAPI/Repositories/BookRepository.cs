@@ -1,4 +1,5 @@
-﻿using BooksWebAPI.Data;
+﻿using AutoMapper;
+using BooksWebAPI.Data;
 using BooksWebAPI.Inerfaces;
 using BooksWebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -12,9 +13,12 @@ namespace BooksWebAPI.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        public BookRepository(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+
+        public BookRepository(ApplicationDbContext context, IMapper mapper)
         {
-                _context = context;
+            _context = context;
+            _mapper = mapper; 
         }
 
         public Task<bool> Add(Book book)
@@ -23,9 +27,11 @@ namespace BooksWebAPI.Repositories
             return Save();
         }
 
-        public async Task<ActionResult<IEnumerable<Book>>> GetAll(string userId)
+        public  async Task<IEnumerable<BookDto>> GetAll(string userId)
         {
-            return await _context.Books.Where(book => Convert.ToString(book.UserId) == userId).ToListAsync();
+            var books =  await _context.Books.Where(book => Convert.ToString(book.UserId) == userId).ToListAsync();
+            var booksDto =  _mapper.Map<IEnumerable<BookDto>>(books);
+            return booksDto;
         }
 
         public async Task<bool> Remove(int id)
